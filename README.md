@@ -8,7 +8,7 @@ This project focuses on developing a movie recommender system using the MovieLen
 
 ## **Dataset Context**
 
-The dataset comprises metadata for 45,000 movies listed in the Full MovieLens dataset. It includes movies released on or before July 2017 and provides a comprehensive view of movie features such as cast, crew, keywords, budget, revenue, release dates, languages, and more. Additionally, it contains 26 million ratings from 270,000 users on a scale of 1-5.
+The dataset comprises metadata for 45,000 movies listed in the Full MovieLens dataset. It includes movies released on or before July 2017 and provides a comprehensive view of movie features such as cast, crew, keywords, budget, revenue, release dates, languages, and more. Additionally, it contains 26 million ratings from 270,000 users on a scale of 1-5. You can access the dataset [here](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset).
 
 ### **Dataset Files**
 
