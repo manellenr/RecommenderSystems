@@ -13,13 +13,7 @@ The dataset comprises metadata for 45,000 movies listed in the Full MovieLens da
 ### **Dataset Files**
 
 - **`movies_metadata.csv`**: Core metadata for 45,000 movies, including details like budget, revenue, runtime, and vote statistics.
-- **`keywords.csv`**: Plot keywords in a JSON format.
-- **`credits.csv`**: Cast and crew details in a JSON format.
-- **`links.csv`**: TMDB and IMDB IDs for all movies in the dataset.
-- **`links_small.csv`**: A smaller subset containing IDs for 9,000 movies.
 - **`ratings_small.csv`**: A sample of 100,000 ratings from 700 users on 9,000 movies.
-
-The dataset ensures a rich repository of features for creating and testing a robust recommender system.
 
 ---
 
