@@ -27,9 +27,9 @@ The dataset comprises metadata for 45,000 movies listed in the Full MovieLens da
 This approach ranks movies based on their weighted ratings, considering vote averages and vote counts. 
 
 - **Weighted Rating Formula**:  
-  \[
-  \text{Weighted Rating} = \left( \frac{v}{v + m} \times R \right) + \left( \frac{m}{v + m} \times C \right)
-  \]
+\[
+\text{Weighted Rating} = \left( \frac{v}{v + m} \times R \right) + \left( \frac{m}{v + m} \times C \right)
+\]
   Where:
   - \( v \): Number of votes for the movie  
   - \( R \): Average vote for the movie  
