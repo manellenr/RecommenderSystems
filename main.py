@@ -9,20 +9,15 @@ def load_and_clean_data(file_path):
     
     df = pd.read_csv(file_path, usecols=colnames)
     
-    # Cleaning the 'budget' and 'revenue' columns to ensure they are numeric
-    # Remove any non-numeric characters (such as file paths or image URLs)
     df["budget"] = df["budget"].replace({'\$': '', ',': '', '/.*': ''}, regex=True)
 
-    # Convert the budget column to numeric, replacing any problematic values with NaN
     df["budget"] = pd.to_numeric(df["budget"], errors='coerce')
 
-    # Handling missing values
     df['budget'].fillna(df['budget'].median(), inplace=True)
     df['revenue'].fillna(df['revenue'].median(), inplace=True)
     df['runtime'].fillna(df['runtime'].median(), inplace=True)
     df.dropna(subset=['title', 'release_date'], inplace=True)
     
-    # Extracting the release year
     df["release_date"] = pd.to_datetime(df["release_date"], format='%Y-%m-%d', errors="coerce")
     df["year"] = pd.DatetimeIndex(df["release_date"]).year
     
@@ -45,10 +40,8 @@ def filter_movies(data, min_runtime=45, max_runtime=300, quantile=0.80):
 
 # Function to calculate the weighted rating for movies
 def calculate_weighted_rating(data, min_votes_threshold=50):
-    # Average vote across all movies
     C = data['vote_average'].sum() / len(data)
     
-    # Calculating the weighted rating
     weighted_ratings = []
     for _, row in data.iterrows():
         v = row['vote_count']
@@ -89,14 +82,11 @@ def recommend_movies(user_index, user_item_matrix, user_similarity_matrix, n_nei
     neighbors_indices = get_neighbors(user_similarity_matrix, user_index, n_neighbors)
     recommended_movies = []
     for neighbor_index in neighbors_indices:
-        # Get the movies rated by the neighbor
         neighbor_ratings = user_item_matrix.iloc[neighbor_index]
-        # Filter the movies not yet rated by the current user
         movies_to_recommend = neighbor_ratings[neighbor_ratings > 0].index
         recommended_movies.extend(movies_to_recommend)
     
-    # Return the most popular recommended movies (unique)
-    recommended_movies = list(set(recommended_movies))  # Remove duplicates
+    recommended_movies = list(set(recommended_movies))
     return recommended_movies[:top_k]
 
 # Load ratings data
@@ -116,6 +106,5 @@ def evaluate_rmse(predictions, actual_ratings):
     return np.sqrt(mean_squared_error(actual_ratings, predictions))
 
 # Example of evaluating the performance of the recommender system
-# Here, we assume 'predictions' is an array of predicted ratings and 'actual_ratings' is the true ratings
 rmse = evaluate_rmse(predictions=np.array([4, 5, 3]), actual_ratings=np.array([4, 4, 3]))
 print(f"RMSE: {rmse}")
