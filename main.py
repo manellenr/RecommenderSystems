@@ -3,7 +3,6 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import mean_squared_error
 
-# Function to load and clean the data
 def load_and_clean_data(file_path):
     colnames = ["title", "release_date", "budget", "revenue", "runtime", "genres", "vote_count", "vote_average"]
     
@@ -23,12 +22,10 @@ def load_and_clean_data(file_path):
     
     return df
 
-# Load and clean the data
 df = load_and_clean_data("movies_metadata.csv")
 print(df.columns)
 df.head(3)
 
-# Function to filter movies based on runtime and vote count conditions
 def filter_movies(data, min_runtime=45, max_runtime=300, quantile=0.80):
     if "vote_count" not in data.columns:
         raise KeyError("'vote_count' column is missing in the dataset.")
@@ -38,7 +35,6 @@ def filter_movies(data, min_runtime=45, max_runtime=300, quantile=0.80):
     filtered_data = filtered_data[filtered_data["vote_count"] >= m]
     return filtered_data
 
-# Function to calculate the weighted rating for movies
 def calculate_weighted_rating(data, min_votes_threshold=50):
     C = data['vote_average'].sum() / len(data)
     
@@ -52,32 +48,26 @@ def calculate_weighted_rating(data, min_votes_threshold=50):
     data['Weighted Rating'] = weighted_ratings
     return data
 
-# Function to get the top N movies based on weighted rating
 def get_top_n_movies(data, n=10):
     return data.sort_values(by="Weighted Rating", ascending=False).head(n)[['title', 'Weighted Rating']]
 
-# Filter the movies and calculate the weighted ratings
 filtered_data = filter_movies(df)
 rated_movies = calculate_weighted_rating(filtered_data)
 top_movies = get_top_n_movies(rated_movies)
 print(top_movies)
 
-# Function to create the user-item rating matrix
 def create_user_item_matrix(ratings_df):
     user_item_matrix = ratings_df.pivot(index='userId', columns='movieId', values='rating').fillna(0)
     return user_item_matrix
 
-# Function to compute user similarity matrix
 def compute_user_similarity(user_item_matrix):
     return cosine_similarity(user_item_matrix)
 
-# Function to get the nearest neighbors of a given user
 def get_neighbors(user_similarity_matrix, user_index, n=5):
     similar_users = user_similarity_matrix[user_index]
     similar_users_sorted = np.argsort(similar_users)[::-1] 
     return similar_users_sorted[:n]
 
-# Function to recommend movies based on nearest neighbors
 def recommend_movies(user_index, user_item_matrix, user_similarity_matrix, n_neighbors=5, top_k=10):
     neighbors_indices = get_neighbors(user_similarity_matrix, user_index, n_neighbors)
     recommended_movies = []
@@ -89,22 +79,17 @@ def recommend_movies(user_index, user_item_matrix, user_similarity_matrix, n_nei
     recommended_movies = list(set(recommended_movies))
     return recommended_movies[:top_k]
 
-# Load ratings data
 ratings = pd.read_csv("ratings_small.csv")
 
-# Create user-item matrix and compute similarity
 user_item_matrix = create_user_item_matrix(ratings)
 user_similarity_matrix = compute_user_similarity(user_item_matrix)
 
-# Recommend movies for user 2
 recommended_movies = recommend_movies(user_index=2, user_item_matrix=user_item_matrix, 
                                       user_similarity_matrix=user_similarity_matrix)
 print("Recommended Movies:", recommended_movies)
 
-# Function to evaluate the performance using RMSE
 def evaluate_rmse(predictions, actual_ratings):
     return np.sqrt(mean_squared_error(actual_ratings, predictions))
 
-# Example of evaluating the performance of the recommender system
 rmse = evaluate_rmse(predictions=np.array([4, 5, 3]), actual_ratings=np.array([4, 4, 3]))
 print(f"RMSE: {rmse}")
